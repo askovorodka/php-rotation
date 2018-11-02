@@ -1,0 +1,153 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * CityRegion
+ *
+ * @ORM\Table(name="city_region")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\CityRegionRepository")
+ */
+class CityRegion
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var int $cityId
+     * @ORM\Column(name="city_id", type="integer")
+     */
+    protected $cityId;
+
+    /**
+     * @var string $cityTitle
+     * @ORM\Column(name="city_title", type="string")
+     */
+    protected $cityTitle;
+
+    /**
+     * @var int $regionId
+     * @ORM\Column(name="region_id", type="integer")
+     */
+    protected $regionId;
+
+    /**
+     * @var string $regionTitle
+     * @ORM\Column(name="region_title", type="string")
+     */
+    protected $regionTitle;
+
+    /**
+     * Get id.
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set cityId.
+     *
+     * @param int $cityId
+     *
+     * @return CityRegion
+     */
+    public function setCityId($cityId)
+    {
+        $this->cityId = $cityId;
+
+        return $this;
+    }
+
+    /**
+     * Get cityId.
+     *
+     * @return int
+     */
+    public function getCityId()
+    {
+        return $this->cityId;
+    }
+
+    /**
+     * Set cityTitle.
+     *
+     * @param string $cityTitle
+     *
+     * @return CityRegion
+     */
+    public function setCityTitle($cityTitle)
+    {
+        $this->cityTitle = $cityTitle;
+
+        return $this;
+    }
+
+    /**
+     * Get cityTitle.
+     *
+     * @return string
+     */
+    public function getCityTitle()
+    {
+        return $this->cityTitle;
+    }
+
+    /**
+     * Set regionId.
+     *
+     * @param int $regionId
+     *
+     * @return CityRegion
+     */
+    public function setRegionId($regionId)
+    {
+        $this->regionId = $regionId;
+
+        return $this;
+    }
+
+    /**
+     * Get regionId.
+     *
+     * @return int
+     */
+    public function getRegionId()
+    {
+        return $this->regionId;
+    }
+
+    /**
+     * Set regionTitle.
+     *
+     * @param string $regionTitle
+     *
+     * @return CityRegion
+     */
+    public function setRegionTitle($regionTitle)
+    {
+        $this->regionTitle = $regionTitle;
+
+        return $this;
+    }
+
+    /**
+     * Get regionTitle.
+     *
+     * @return string
+     */
+    public function getRegionTitle()
+    {
+        return $this->regionTitle;
+    }
+}

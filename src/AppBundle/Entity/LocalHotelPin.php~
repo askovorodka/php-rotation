@@ -1,0 +1,287 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
+use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Serializer\Annotation\Groups;
+
+/**
+ * Class LocalHotelPin
+ *
+ * @package AppBundle\Entity
+ *
+ * @ORM\Table(name="local_hotel_pin")
+ * @ORM\Entity
+ *
+ * @ApiResource(
+ *     attributes={
+ *         "normalization_context"={"groups"={"local-hotel-pin_GET"}}
+ *     },
+ *     collectionOperations={
+ *         "get"={"method"="GET", "access_control"="is_granted('ROLE_MANAGER')"},
+ *         "post"={"method"="POST", "access_control"="is_granted('ROLE_MANAGER')"},
+ *     },
+ *     itemOperations={
+ *         "get"={"method"="GET", "access_control"="is_granted('ROLE_MANAGER')"},
+ *         "put"={"method"="PUT", "access_control"="is_granted('ROLE_MANAGER')"},
+ *         "delete"={"method"="DELETE", "access_control"="is_granted('ROLE_MANAGER')"},
+ *     },
+ * )
+ *
+ * @Gedmo\Loggable(logEntryClass="AppBundle\Entity\LogEntry")
+ */
+class LocalHotelPin
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     *
+     * @Groups({"local-hotel-pin_GET"})
+     *
+     * @Gedmo\Versioned
+     */
+    private $id;
+
+    /**
+     * @var null|PinCategory
+     *
+     * @ORM\ManyToOne(targetEntity="PinCategory")
+     * @ORM\JoinColumn(name="pin_category_id", referencedColumnName="id")
+     *
+     * @Gedmo\Versioned
+     */
+    private $pinCategory;
+
+    /**
+     * @var Preset|null
+     *
+     * @ORM\ManyToOne(targetEntity="Preset")
+     * @ORM\JoinColumn(name="preset_id", referencedColumnName="id", nullable=false)
+     *
+     * @ApiSubresource
+     *
+     * @Groups({"local-hotel-pin_GET"})
+     *
+     * @Gedmo\Versioned
+     */
+    private $preset;
+
+    /**
+     * @var Hotel|null
+     *
+     * @ORM\ManyToOne(targetEntity="Hotel")
+     * @ORM\JoinColumn(name="hotel_id", referencedColumnName="id", nullable=false)
+     *
+     * @ApiSubresource
+     *
+     * @Groups({"local-hotel-pin_GET"})
+     *
+     * @Gedmo\Versioned
+     */
+    private $hotel;
+
+    /**
+     * @var int|null
+     *
+     * @ORM\Column(name="city_id", type="integer", nullable=true)
+     *
+     * @Groups({"local-hotel-pin_GET"})
+     *
+     * @Gedmo\Versioned
+     */
+    private $cityId;
+
+    /**
+     * @var int|null
+     *
+     * @ORM\Column(name="region_id", type="integer", nullable=true)
+     *
+     * @Groups({"local-hotel-pin_GET"})
+     *
+     * @Gedmo\Versioned
+     */
+    private $regionId;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="position", type="integer", nullable=false)
+     *
+     * @Groups({"local-hotel-pin_GET"})
+     *
+     * @Gedmo\Versioned
+     */
+    private $position;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="is_active", type="boolean", nullable=false)
+     *
+     * @Groups({"local-hotel-pin_GET"})
+     *
+     * @Gedmo\Versioned
+     */
+    private $isActive;
+
+    /**
+     * LocalHotelPin constructor.
+     */
+    public function __construct()
+    {
+        $this->createdAt = new \DateTime();
+        $this->isActive = true;
+    }
+
+    /**
+     * @var \DateTimeInterface
+     *
+     * @ORM\Column(name="created_at", type="datetime", nullable=false)
+     *
+     * @Groups({"local-hotel-pin_GET"})
+     *
+     * @Gedmo\Versioned
+     */
+    private $createdAt;
+
+    /**
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return Preset|null
+     */
+    public function getPreset(): ?Preset
+    {
+        return $this->preset;
+    }
+
+    /**
+     * @param Preset|null $preset
+     * @return LocalHotelPin
+     */
+    public function setPreset(?Preset $preset): LocalHotelPin
+    {
+        $this->preset = $preset;
+        return $this;
+    }
+
+    /**
+     * @return Hotel|null
+     */
+    public function getHotel(): ?Hotel
+    {
+        return $this->hotel;
+    }
+
+    /**
+     * @param Hotel|null $hotel
+     * @return LocalHotelPin
+     */
+    public function setHotel(?Hotel $hotel): LocalHotelPin
+    {
+        $this->hotel = $hotel;
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getCityId(): ?int
+    {
+        return $this->cityId;
+    }
+
+    /**
+     * @param int|null $cityId
+     * @return LocalHotelPin
+     */
+    public function setCityId(?int $cityId): LocalHotelPin
+    {
+        $this->cityId = $cityId;
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getRegionId(): ?int
+    {
+        return $this->regionId;
+    }
+
+    /**
+     * @param int|null $regionId
+     * @return LocalHotelPin
+     */
+    public function setRegionId(?int $regionId): LocalHotelPin
+    {
+        $this->regionId = $regionId;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPosition(): int
+    {
+        return $this->position;
+    }
+
+    /**
+     * @param int $position
+     * @return LocalHotelPin
+     */
+    public function setPosition(int $position): LocalHotelPin
+    {
+        $this->position = $position;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getIsActive(): bool
+    {
+        return $this->isActive;
+    }
+
+    /**
+     * @param bool $isActive
+     * @return LocalHotelPin
+     */
+    public function setIsActive(bool $isActive): LocalHotelPin
+    {
+        $this->isActive = $isActive;
+        return $this;
+    }
+
+    /**
+     * @return \DateTimeInterface
+     */
+    public function getCreatedAt(): \DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @param \DateTimeInterface $createdAt
+     * @return LocalHotelPin
+     */
+    public function setCreatedAt(\DateTimeInterface $createdAt): LocalHotelPin
+    {
+        $this->createdAt = $createdAt;
+        return $this;
+    }
+
+}

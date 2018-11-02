@@ -1,0 +1,314 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use AppBundle\Annotation\LoggableTableTitleAnnotation;
+
+/**
+ * FederalHotelPin
+ *
+ * @ORM\Table(name="federal_hotel_pin", indexes={
+ *     @ORM\Index(name="hotel_id", columns={"hotel_id"})
+ * })
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\FederalHotelPinRepository")
+ *
+ * @UniqueEntity("position")
+ *
+ * @ApiResource(
+ *     attributes={
+ *         "normalization_context"={"groups"={"federal-hotel-pin_GET"}}
+ *     },
+ *     collectionOperations={
+ *         "get"={"method"="GET", "access_control"="is_granted('ROLE_MANAGER')"},
+ *         "post"={"method"="POST", "access_control"="is_granted('ROLE_MANAGER')"},
+ *     },
+ *     itemOperations={
+ *         "get"={"method"="GET", "access_control"="is_granted('ROLE_MANAGER')"},
+ *         "put"={"method"="PUT", "access_control"="is_granted('ROLE_MANAGER')"},
+ *     },
+ * )
+ * @Gedmo\Loggable(logEntryClass="AppBundle\Entity\LogEntry")
+ * @LoggableTableTitleAnnotation(title="Отели")
+ */
+class FederalHotelPin
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     *
+     * @Groups({"preset-hotel-pin_GET"})
+     *
+     * @Gedmo\Versioned
+     */
+    private $id;
+
+    /**
+     * @var PinCategory
+     *
+     * @ORM\ManyToOne(targetEntity="PinCategory", fetch="EAGER")
+     * @ORM\JoinColumn(name="pin_category_id", referencedColumnName="id")
+     *
+     * @Gedmo\Versioned
+     */
+    private $pinCategory;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Hotel")
+     * @ORM\JoinColumn(name="hotel_id", referencedColumnName="id", nullable=false)
+     *
+     * @Groups({"preset-hotel-pin_GET"})
+     *
+     * @ApiSubresource
+     *
+     * @Gedmo\Versioned
+     */
+    private $hotel;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="position", type="integer", nullable=false, unique=true)
+     *
+     * @Groups({"preset-hotel-pin_GET"})
+     *
+     * @Gedmo\Versioned
+     */
+    private $position;
+
+    /**
+     * @var array
+     *
+     * @ORM\Column(name="exclude_cities_ids", type="json", nullable=true)
+     *
+     * @Groups({"preset-hotel-pin_GET"})
+     *
+     * @Gedmo\Versioned
+     */
+    private $excludeCitiesIds;
+
+    /**
+     * @var array
+     *
+     * @ORM\Column(name="exclude_regions_ids", type="json", nullable=true)
+     *
+     * @Groups({"preset-hotel-pin_GET"})
+     *
+     * @Gedmo\Versioned
+     */
+    private $excludeRegionsIds;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="is_active", type="boolean", nullable=false)
+     *
+     * @Groups({"preset-hotel-pin_GET"})
+     *
+     * @Gedmo\Versioned
+     */
+    private $isActive;
+
+    /**
+     * @var \DateTimeInterface
+     *
+     * @ORM\Column(name="created_at", type="datetime", nullable=false)
+     *
+     * @Groups({"preset-hotel-pin_GET"})
+     *
+     * @Gedmo\Versioned
+     */
+    private $createdAt;
+
+    public function __construct()
+    {
+        $this->isActive = true;
+        $this->createdAt = new \DateTime('now');
+    }
+
+    /**
+     * Get id.
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set position.
+     *
+     * @param int $position
+     *
+     * @return FederalHotelPin
+     */
+    public function setPosition($position)
+    {
+        $this->position = $position;
+
+        return $this;
+    }
+
+    /**
+     * Get position.
+     *
+     * @return int
+     */
+    public function getPosition()
+    {
+        return $this->position;
+    }
+
+    /**
+     * Set excludeCitiesIds.
+     *
+     * @param json|null $excludeCitiesIds
+     *
+     * @return FederalHotelPin
+     */
+    public function setExcludeCitiesIds($excludeCitiesIds)
+    {
+        $this->excludeCitiesIds = $excludeCitiesIds;
+
+        return $this;
+    }
+
+    /**
+     * Get excludeCitiesIds.
+     *
+     * @return json|null
+     */
+    public function getExcludeCitiesIds()
+    {
+        return $this->excludeCitiesIds;
+    }
+
+    /**
+     * Set excludeRegionsIds.
+     *
+     * @param json|null $excludeRegionsIds
+     *
+     * @return FederalHotelPin
+     */
+    public function setExcludeRegionsIds($excludeRegionsIds)
+    {
+        $this->excludeRegionsIds = $excludeRegionsIds;
+
+        return $this;
+    }
+
+    /**
+     * Get excludeRegionsIds.
+     *
+     * @return json|null
+     */
+    public function getExcludeRegionsIds()
+    {
+        return $this->excludeRegionsIds;
+    }
+
+    /**
+     * Set isActive.
+     *
+     * @param bool $isActive
+     *
+     * @return FederalHotelPin
+     */
+    public function setIsActive($isActive)
+    {
+        $this->isActive = $isActive;
+
+        return $this;
+    }
+
+    /**
+     * Get isActive.
+     *
+     * @return bool
+     */
+    public function getIsActive()
+    {
+        return $this->isActive;
+    }
+
+    /**
+     * Set createdAt.
+     *
+     * @param \DateTime $createdAt
+     *
+     * @return FederalHotelPin
+     */
+    public function setCreatedAt($createdAt)
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * Get createdAt.
+     *
+     * @return \DateTime
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * Set hotel.
+     *
+     * @param \AppBundle\Entity\Hotel $hotel
+     *
+     * @return FederalHotelPin
+     */
+    public function setHotel(\AppBundle\Entity\Hotel $hotel)
+    {
+        $this->hotel = $hotel;
+
+        return $this;
+    }
+
+    /**
+     * Get hotel.
+     *
+     * @return \AppBundle\Entity\Hotel
+     */
+    public function getHotel()
+    {
+        return $this->hotel;
+    }
+
+    /**
+     * Set pinCategory.
+     *
+     * @param \AppBundle\Entity\PinCategory $pinCategory
+     *
+     * @return FederalHotelPin
+     */
+    public function setPinCategory(\AppBundle\Entity\PinCategory $pinCategory)
+    {
+        $this->pinCategory = $pinCategory;
+
+        return $this;
+    }
+
+    /**
+     * Get pinCategory.
+     *
+     * @return \AppBundle\Entity\PinCategory
+     */
+    public function getPinCategory()
+    {
+        return $this->pinCategory;
+    }
+}
